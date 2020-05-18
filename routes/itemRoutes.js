@@ -38,10 +38,14 @@ router.post('/', function (req, res, next) {
 router.patch('/:name', function (req, res, next) {
   try {
     const itemUpdated = itemsDb.find((item) => item.name === req.params.name);
-    if (item === undefined) {
+    if (itemUpdated === undefined) {
       throw new ExpressError('Item not found', 404);
     }
-    return res.json({ updated: itemUpdated });
+
+    itemUpdated.name = req.body.name;
+    itemUpdated.price = req.body.price;
+
+    return res.status(200).json({ updated: itemUpdated });
   } catch (error) {
     return next(error);
   }
